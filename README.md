@@ -8,6 +8,11 @@ Required variables:
   * `CERTBOT_EMAIL`
   * `DOMAINS` (comma separated list)
 
+DNS Plugins:
+  * `DNS` e.g. `cloudflare`
+  * `DNS_CREDENTIALS` path to secret credential file for DNS provider
+  * `DNS_PROPAGATION` (optional, default 60 seconds) 
+
 Optional variables:
   * `CERT_EXPORT`
   * `CERTBOT_OPTIONS` additional Certbot options, e.g. `--reuse-key`

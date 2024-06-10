@@ -41,5 +41,21 @@ entrypoint_log "$ME: Creating certbot renewal-hooks..."
 ln -sf /scripts/certbot-export.sh /etc/letsencrypt/renewal-hooks/post/certbot-export.sh
 
 entrypoint_log "$ME: Creating new certbot account!"
-certbot --non-interactive --agree-tos -m $CERTBOT_EMAIL --nginx --domains $DOMAINS $CERTBOT_OPTIONS
+
+dns_options=""
+web_server="--nginx"
+
+if [[ -n $DNS ]]; then
+  entrypoint_log "$ME: Using $DNS DNS plugin."
+
+  if [[ -z $DNS_CREDENTIALS ]]; then
+    entrypoint_log "$ME: DNS_CREDENTIALS environment variable undefined. Aborting!"
+    exit 1  
+  fi
+
+  web_server=""
+  dns_options="--dns-${DNS} --dns-${DNS}-credentials $DNS_CREDENTIALS --dns-${DNS}-propagation-seconds ${DNS_PROPAGATION:-60}"
+fi
+
+certbot certonly $dns_options --non-interactive --agree-tos -m $CERTBOT_EMAIL $web_server --domains $DOMAINS $CERTBOT_OPTIONS
 exit $?
