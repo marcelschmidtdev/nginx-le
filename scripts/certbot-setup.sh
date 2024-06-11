@@ -57,5 +57,13 @@ if [[ -n $DNS ]]; then
   dns_options="--dns-${DNS} --dns-${DNS}-credentials $DNS_CREDENTIALS --dns-${DNS}-propagation-seconds ${DNS_PROPAGATION:-60}"
 fi
 
-certbot certonly $dns_options --non-interactive --agree-tos -m $CERTBOT_EMAIL $web_server --domains $DOMAINS $CERTBOT_OPTIONS
+IFS=';' read -r -a array <<< "$DOMAINS"
+for domain in "${array[@]}"
+do
+  certbot certonly $dns_options --non-interactive --agree-tos -m $CERTBOT_EMAIL $web_server --domains $domain $CERTBOT_OPTIONS
+  if [ $? -gt 0 ]; then
+    exit $?
+  fi
+done
+
 exit $?

@@ -6,7 +6,10 @@ This Docker image runs latest Nginx together with Let's Encrypt Certbot. It will
 
 Required variables:
   * `CERTBOT_EMAIL`
-  * `DOMAINS` (comma separated list)
+  * `DOMAINS` (comma separated list for alias domains, semicolon separated list for independent certificates)
+    * E.g. `a.example.com,b.example.com;example.com` 
+    * creates 2 different certificates where in the first one `b.example.com` is an alias domain of `a.example.com`
+
 
 DNS Plugins:
   * `DNS` e.g. `cloudflare`
