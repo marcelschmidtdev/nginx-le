@@ -15,10 +15,16 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /root/.cache \
  && mkdir -p /var/www/letsencrypt \
+ && mkdir -p /etc/nginx/available-conf.d \
+ && mv /etc/nginx/conf.d/* /etc/nginx/available-conf.d \
+ && sed -i 's/conf.d/available-conf.d/' /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh \
  && chown www-data:www-data -R /var/www
 
 COPY ./scripts /scripts
-RUN chmod -R +x /scripts
+COPY ./docker-entrypoint.d/*.sh /docker-entrypoint.d
+
+RUN chmod -R +x /scripts \
+ && chmod -R +x /docker-entrypoint.d
 
 VOLUME /etc/letsencrypt
  

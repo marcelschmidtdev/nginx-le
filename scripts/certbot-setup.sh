@@ -10,6 +10,21 @@ entrypoint_log() {
 
 ME=$(basename "$0")
 
+enable_configs() {
+  prev_dir=$(pwd)
+  cd /etc/nginx/available-conf.d
+
+  array=($(ls *.conf))
+  for element in "${array[@]}"
+  do
+    entrypoint_log "$ME: Enable config '${element}'"
+    ln -s $element -r ../conf.d
+  done
+
+  cd $prev_dir
+  nginx -s reload
+}
+
 set +e
 
 certbot show_account > /dev/null 2>&1
@@ -19,7 +34,7 @@ if [ $? -eq 0 ]; then
 
   if [ "$(ls /etc/letsencrypt/renewal)" ]; then
     entrypoint_log "$ME: Found configured domains! Attempting renewal..."
-    certbot renew --nginx
+    certbot renew && enable_configs
     exit $?
   fi
   exit 0
@@ -66,4 +81,5 @@ do
   fi
 done
 
+enable_configs
 exit $?
