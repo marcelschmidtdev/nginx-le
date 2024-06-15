@@ -18,6 +18,7 @@ RUN set -ex \
  && mkdir -p /etc/nginx/available-conf.d \
  && mv /etc/nginx/conf.d/* /etc/nginx/available-conf.d \
  && sed -i 's/conf.d/available-conf.d/' /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh \
+ && sed -i 's/grep $DEFAULT_CONF_FILE/grep default.conf/g' /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh \
  && chown www-data:www-data -R /var/www
 
 COPY ./scripts /scripts
