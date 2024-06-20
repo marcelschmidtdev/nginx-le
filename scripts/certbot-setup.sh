@@ -53,7 +53,7 @@ if [[ -z $DOMAINS ]]; then
 fi
 
 entrypoint_log "$ME: Creating certbot renewal-hooks..."
-ln -sf /scripts/certbot-export.sh /etc/letsencrypt/renewal-hooks/post/certbot-export.sh
+cp -R -u -s -n /scripts/renewal-hooks /etc/letsencrypt/
 
 entrypoint_log "$ME: Creating new certbot account!"
 
