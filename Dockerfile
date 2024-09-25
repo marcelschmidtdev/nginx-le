@@ -23,6 +23,7 @@ RUN set -ex \
 
 COPY ./scripts /scripts
 COPY ./docker-entrypoint.d/*.sh /docker-entrypoint.d
+COPY ./logrotate.d/nginx /etc/logrotate.d
 
 RUN chmod -R +x /scripts \
  && chmod -R +x /docker-entrypoint.d
