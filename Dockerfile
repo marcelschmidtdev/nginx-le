@@ -12,6 +12,7 @@ RUN set -ex \
  && /opt/certbot/bin/pip install certbot certbot-nginx $(echo $CERTBOT_DNS_AUTHENTICATORS | sed 's/\(^\| \)/\1certbot-dns-/g')\
  && ln -s /opt/certbot/bin/certbot /usr/bin/certbot \
  && echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q" | tee -a /etc/crontab > /dev/null \
+ && echo "0 0 * * * root /usr/sbin/logrotate /etc/logrotate.d/nginx" | tee -a /etc/crontab > /dev/null \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /root/.cache \
  && mkdir -p /var/www/letsencrypt \
