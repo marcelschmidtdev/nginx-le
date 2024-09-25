@@ -8,6 +8,6 @@
   create 640 nginx adm
   sharedscripts
   postrotate
-    nginx -s reopen
+    nginx -s reload
   endscript
 }
